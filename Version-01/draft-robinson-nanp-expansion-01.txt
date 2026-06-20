@@ -1,0 +1,952 @@
+
+
+
+
+Network Working Group                                        P. Robinson
+Internet-Draft                                             29 April 2026
+Intended status: Informational                                          
+Expires: 31 October 2026
+
+
+A Proposal for Long-Term Expansion of the North American Numbering Plan
+                          (NANP) to 11 Digits
+                    draft-robinson-nanp-expansion-01
+
+Abstract
+
+   The North American Numbering Plan (NANP) is projected to exhaust
+   available telephone numbering resources within the coming decades
+   under current allocation and utilization trends.  Existing mitigation
+   strategies, including area code overlays and number pooling, extend
+   the usable life of the NANP but introduce increasing operational
+   complexity and user confusion.
+
+   This document proposes a long-term, uniform expansion of NANP
+   telephone numbers from 10 to 11 digits through extension of the area
+   code or Numbering Plan Area (NPA) from 3 to 4 digits.  The proposal
+   emphasizes backward compatibility, fixed-length numbering, and a
+   multi-phase transition strategy designed to minimize disruption.
+   This document is intended to stimulate discussion and does not
+   represent the position of any standards body or regulatory authority.
+
+About This Document
+
+   This note is to be removed before publishing as an RFC.
+
+   Status information for this document may be found at
+   https://datatracker.ietf.org/doc/draft-robinson-nanp-expansion/.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/electric-socket/11digitdialing.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+
+
+
+
+Robinson                 Expires 31 October 2026                [Page 1]
+
+Internet-Draft               NANP Expansion                   April 2026
+
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 31 October 2026.
+
+Copyright Notice
+
+   Copyright (c) 2026 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
+   2.  Requirements Language . . . . . . . . . . . . . . . . . . . .   3
+   3.  Definitions . . . . . . . . . . . . . . . . . . . . . . . . .   3
+   4.  Problem Statement . . . . . . . . . . . . . . . . . . . . . .   5
+   5.  Design Goals  . . . . . . . . . . . . . . . . . . . . . . . .   5
+   6.  Non-Goals . . . . . . . . . . . . . . . . . . . . . . . . . .   6
+   7.  Proposed Expansion Model  . . . . . . . . . . . . . . . . . .   6
+   8.  Human Factors . . . . . . . . . . . . . . . . . . . . . . . .   8
+   9.  Routing Considerations  . . . . . . . . . . . . . . . . . . .   8
+   10. Transition Strategy . . . . . . . . . . . . . . . . . . . . .   8
+     10.1.  Phase 0: Infrastructure Readiness  . . . . . . . . . . .   8
+     10.2.  Phase 1: Dual-Format Acceptance  . . . . . . . . . . . .   9
+     10.3.  Phase 2: User Notification . . . . . . . . . . . . . . .   9
+       10.3.1.  Segment 1  . . . . . . . . . . . . . . . . . . . . .   9
+       10.3.2.  Segment 2  . . . . . . . . . . . . . . . . . . . . .   9
+     10.4.  Phase 3: Mandatory Expansion . . . . . . . . . . . . . .   9
+     10.5.  Phase 4: Full Expansion  . . . . . . . . . . . . . . . .   9
+   11. Alternatives Considered . . . . . . . . . . . . . . . . . . .  10
+     11.1.  Further subdivision of number pooling blocks . . . . . .  10
+     11.2.  Expansion using only reserved NPA ranges (e.g., N9X) . .  10
+     11.3.  Overlay NPAs . . . . . . . . . . . . . . . . . . . . . .  10
+     11.4.  Variable-length numbering schemes  . . . . . . . . . . .  10
+     11.5.  Expansion Of NXX To NXXX . . . . . . . . . . . . . . . .  11
+     11.6.  Expansion Of XXXX To XXXXX . . . . . . . . . . . . . . .  11
+   12. Operational Considerations  . . . . . . . . . . . . . . . . .  11
+   13. Backwards Compatibility Risks . . . . . . . . . . . . . . . .  12
+   14. Benefits  . . . . . . . . . . . . . . . . . . . . . . . . . .  13
+   15. Economic Considerations . . . . . . . . . . . . . . . . . . .  14
+
+
+
+Robinson                 Expires 31 October 2026                [Page 2]
+
+Internet-Draft               NANP Expansion                   April 2026
+
+
+     15.1.  Cost Considerations Of Methods Used  . . . . . . . . . .  14
+     15.2.  Billing and Rating Impact  . . . . . . . . . . . . . . .  14
+   16. Security Considerations . . . . . . . . . . . . . . . . . . .  15
+   17. Transition Governance . . . . . . . . . . . . . . . . . . . .  15
+   18. Transition Difficulties . . . . . . . . . . . . . . . . . . .  15
+   19. International Considerations  . . . . . . . . . . . . . . . .  16
+   20. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  16
+   21. Conclusion  . . . . . . . . . . . . . . . . . . . . . . . . .  16
+   22. References  . . . . . . . . . . . . . . . . . . . . . . . . .  16
+     22.1.  Normative References . . . . . . . . . . . . . . . . . .  16
+     22.2.  Informative References . . . . . . . . . . . . . . . . .  17
+   Appendix A.  Changelog  . . . . . . . . . . . . . . . . . . . . .  17
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  17
+
+1.  Introduction
+
+   The NANP currently utilizes a fixed-length 10-digit numbering format
+   (NPA-NXX-XXXX).  Growth in telecommunications services, device
+   proliferation, and number portability has steadily increased demand
+   for numbering resources.
+
+   Mitigation strategies such as overlays and thousands-block number
+   pooling have delayed exhaustion but introduce increasing complexity
+   in routing, administration, and user experience.
+
+   This document explores a uniform expansion of NANP numbers to 11
+   digits as a long-term solution.
+
+   This proposal preserves fixed-position digit parsing, avoiding
+   variable-length interpretation and timing-based ambiguity.  This
+   property is a primary design objective, as it minimizes required
+   changes to existing switching and routing infrastructure.
+
+2.  Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+3.  Definitions
+
+   CP:  is Cellular Provider, the service provider for a caller using
+      cellular telephony.
+
+   IXC:  Interexchange Carrier - the organization that carries a call
+
+
+
+
+Robinson                 Expires 31 October 2026                [Page 3]
+
+Internet-Draft               NANP Expansion                   April 2026
+
+
+      between the caller's service provider and the called party's
+      service provider where the caller's service provider does not
+      serve the area of the called party.
+
+   Jeopardy:   Jeopardy is the condition where an NPA is in danger of
+      running out of available NXXs to use for new telephone
+      subscribers, requiring a freeze on the issuance of further
+      subscriber numbers in that NPA until more NXXs become available.
+
+   LEC:  Local Exchange Carrier, the service provider for a caller using
+      a landline or VoIP service, the organization that provides dial
+      tone and carries a call to the called party where they are within
+      the service area of the LEC, or transfers the call to an IXC when
+      the called party is outside its service area.
+
+   N versus X:  In the context of a telephone number, N is used to
+      indicate a digit that is restricted to values of 2 through 9,
+      while X indicates an unrestricted digit with values 0 through 9.
+
+   NPA:  The area code, or first three digits of the 10-digit telephone
+      number.  This document will use both 'area code' and 'NPA'
+      interchangeably, generally with NPA used when discussing technical
+      and implementation issues, and area code being used when
+      discussing issues faced by subscribers and the public.
+
+   NPAX:  The new area code, or first four digits of the new 11-digit
+      telephone number.  This proposal recommends expansion of the NPA
+      field by 1 digit and provides an expansion of the entire telephone
+      number to 11 digits.
+
+   NXX:  The prefix, or digits four through six of the 10-digit
+      telephone number, or first three digits of the subscriber number.
+      This field is to remain unchanged, but is moved to digits five
+      through seven of the new 11-digit telephone number.
+
+   SIT tone:  A Special Information Tone (SIT) is a standardized, three-
+      beep audio signal (typically 950/1400/1800 Hz) played before a
+      recorded announcement to indicate a telephone call has failed.
+
+   Subscriber number:  The portion of the telephone number following the
+      NPA or NPAX.  It remains unchanged at seven digits, but is moved
+      from positions four through ten of the telephone number, to
+      positions five through eleven.
+
+   Telephone number:  The entire number of the party to be called,
+      consisting of either
+
+
+
+
+
+Robinson                 Expires 31 October 2026                [Page 4]
+
+Internet-Draft               NANP Expansion                   April 2026
+
+
+   *  On 10-digit systems, the three-digit NPA, three-digit NXX, and
+      four-digit XXXX.
+
+   *  On 11-digit systems, the four-digit NPAX, three-digit NXX, and
+      four-digit XXXX.
+
+   VoIP:  Voice Over IP, or telephone service where the call initiates
+      from or terminates via the Internet.
+
+   XXXX:  The last four digits of the subscriber number, or line number,
+      digits seven through ten of the 10-digit telephone number.  This
+      field is also to remain unchanged, but is moved to digits eight
+      through eleven of the new 11-digit telephone number.
+
+4.  Problem Statement
+
+   The current NANP faces several challenges:
+
+   *  Finite NPA capacity under existing numbering rules
+
+   *  Fragmentation of numbering resources due to allocation practices
+
+   *  Growing operational complexity in routing and database systems
+
+   *  Long lead times required for major numbering plan changes
+
+   A long-term solution should address these challenges while minimizing
+   disruption to existing systems and users.
+
+   All feasible approaches to expanding NANP numbering capacity
+   introduce some degree of disruption.  The proposed expansion of the
+   NPA is considered the least disruptive option, as it preserves the
+   existing hierarchical structure of the numbering plan and minimizes
+   changes to subscriber numbering and routing semantics.
+
+5.  Design Goals
+
+   The proposed solution is guided by the following goals:
+
+   *  Maintain fixed-length numbering
+
+   *  Minimize changes to existing routing logic
+
+   *  Preserve compatibility with existing numbering structures
+
+
+
+
+
+
+
+Robinson                 Expires 31 October 2026                [Page 5]
+
+Internet-Draft               NANP Expansion                   April 2026
+
+
+6.  Non-Goals
+
+   The following approaches are explicitly not considered desirable:
+
+   *  Variable-length telephone numbers
+
+   *  Region-specific numbering formats
+
+   *  Frequent or repeated structural changes to the numbering plan
+
+   *  Solutions requiring rapid or "flash cut" transitions
+
+7.  Proposed Expansion Model
+
+   This document is a proposal to expand NANP numbers from 10 to 11
+   digits by extending the NPA from three digits to four digits.  This
+   ensures that existing fixed-position digit parsing logic can be
+   extended with minimal modification, avoiding the need for timing-
+   based or variable-length interpretation.
+
+   Existing numbers:
+
+     NPA-NXX-XXXX
+
+   Expanded format:
+
+     NPAX-NXX-XXXX
+
+   During initial deployment, the fourth digit added to the NPA to form
+   the NPAX MUST be selected such that it does not conflict with
+   existing digit patterns used to identify the first digit of NXX
+   codes.  Under current NANP rules, the first digit of an NXX is
+   restricted to values 2 through 9.
+
+   By selecting 0 or 1 for the additional NPA digit, the boundary
+   between the expanded NPAX and the following NXX remains unambiguous.
+   This allows existing digit analysis algorithms to distinguish between
+   legacy 10-digit and expanded 11-digit numbers using a simple
+   examination of the fourth digit.
+
+   Restricting the fourth digit initially to a single value minimizes
+   required changes to routing logic and reduces deployment cost.
+
+   This property allows existing fixed-position digit analysis logic to
+   be extended with minimal modification, avoiding the need for timing-
+   based disambiguation, interdigit timeout adjustments, or variable-
+   length parsing mechanisms.
+
+
+
+
+Robinson                 Expires 31 October 2026                [Page 6]
+
+Internet-Draft               NANP Expansion                   April 2026
+
+
+   A single value (0 or 1) SHALL be used consistently across all NPAs
+   during the initial deployment phase to ensure uniform behavior across
+   networks.  Uniformity avoids user confusion, simplifies parsing, and
+   prevents mixed national behavior during migration.
+
+   Example:
+
+     213-555-1234  (legacy)
+
+     2130-555-1234 (expanded)
+
+   Or:
+
+     303-555-1234  (legacy)
+
+     3031-555-1234 (expanded)
+
+   A telephone switching system processes a telephone number using the
+   following logic:
+
+   1.  Scan fourth digit of number.
+
+   2.  If 0 or 1, process as NPAX.
+
+   3.  Else, process as NXX.
+
+   This proposal preserves the semantic structure of the number.
+
+   *  NPAX is still geographic.
+
+   *  NXX is still used as the routing block.
+
+   *  XXXX is still the subscriber line number.
+
+   The widespread adoption of overlay area codes has fundamentally
+   altered the NANP environment.  A return to strictly geographic, non-
+   overlapping area codes is no longer practical.  The proposed approach
+   assumes the continued existence of overlays and does not attempt to
+   reverse this trend.
+
+   The designation of 988 as a nationwide service code required the
+   elimination of 7-digit dialing in affected areas, accelerating the
+   transition to uniform 10-digit dialing across the NANP.  As a result,
+   this proposal does not impact legacy 7-digit dialing, as that
+   capability has already been largely eliminated.
+
+
+
+
+
+
+Robinson                 Expires 31 October 2026                [Page 7]
+
+Internet-Draft               NANP Expansion                   April 2026
+
+
+   This approach ensures that numbering expansion occurs at the highest
+   level of the NANP hierarchy, avoiding disruption to lower-level
+   components such as routing prefixes and subscriber numbers.
+
+   This method preserves fixed-field positional parsing, avoiding the
+   need for timing-based digit collection or variable-length
+   interpretation, which are known sources of complexity and error
+   in telephony systems.
+
+8.  Human Factors
+
+   During and after transition, published numbers SHOULD be displayed in
+   hyphenated 4-3-4 form (e.g., 2130-555-1234).  Users will find this
+   format similar to the existing 3-3-4 format, and are expected to
+   adapt to the new format following the patterns observed during the
+   transition to mandatory 10-digit dialing.  Contact storage systems,
+   dialing interfaces, and automated dialing features are expected to
+   adapt with minimal modification due to the preserved fixed-length
+   structure.
+
+9.  Routing Considerations
+
+   Existing routing systems rely on fixed field positions within the
+   NANP number.  The proposed expansion preserves the relative position
+   of the NXX and subscriber line number fields, allowing for minimal
+   modification to routing logic.
+
+   Systems that perform digit analysis MUST be updated to recognize the
+   NPAX format.  This includes SS7-based switching systems, SIP routing
+   platforms, and number portability databases.
+
+   These updates are limited to recognition of the fourth digit as a
+   format discriminator and do not require changes to downstream routing
+   logic based on NXX or subscriber number.
+
+10.  Transition Strategy
+
+   A phased transition is recommended:
+
+10.1.  Phase 0: Infrastructure Readiness
+
+   Networks and systems are updated to support 11-digit numbers without
+   public announcement.  Switching systems MUST be updated to recognize
+   and correctly route NPAX-based numbers during Phase 0.
+
+   There SHOULD be some cross-network communication system such as a
+   website, a mailing list, a help desk, and/or other method for parties
+   involved in the conversion to report progress and to obtain
+
+
+
+Robinson                 Expires 31 October 2026                [Page 8]
+
+Internet-Draft               NANP Expansion                   April 2026
+
+
+   information helpful in diagnosing problems, issues and events that
+   may require special attention or otherwise require additional
+   resources for resolution.  This SHOULD be provided or operated by a
+   neutral third-party.
+
+10.2.  Phase 1: Dual-Format Acceptance
+
+   Both 10-digit and 11-digit dialing are accepted by all CPs, IXCs, and
+   LECs.  All originating and terminating networks MUST accept both
+   formats.
+
+10.3.  Phase 2: User Notification
+
+   Phase 2 is implemented as two segments.
+
+10.3.1.  Segment 1
+
+   In Segment 1 of Phase 2, LECs, CPs, IXCs, and regulatory authorities
+   MUST publicize the implementation of the expansion of the NPA to an
+   NPAX, where the area code is expanded to four digits, and the
+   telephone number to eleven digits.  An important highlight of the
+   announcement SHOULD emphasize that there will be no change to the
+   subscriber number.  It SHOULD also state the date Segment 2 will
+   begin and the date that phase 3 will begin.
+
+10.3.2.  Segment 2
+
+   In Segment 2 of Phase 2, Intercept messages SHALL be imposed on
+   callers dialing a 10-digit phone number, and such message SHALL
+   inform callers dialing telephone numbers using the current 10-digit
+   format of upcoming requirements, MAY inform them of the digit they
+   need to append to the area code, and SHOULD state the date when
+   dialing the new 11-digit number will be required.  The call SHALL
+   still complete.
+
+10.4.  Phase 3: Mandatory Expansion
+
+   11-digit dialing becomes required.  Callers dialing the old format
+   10-digit number SHALL be presented with an intercept message
+   beginning with a SIT tone and an announcement that they must dial the
+   new 4-digit area code.  The message MAY announce the additional digit
+   that MUST be dialed.  The call SHALL NOT complete, and SHALL be
+   treated equivalently to dialing an invalid number.
+
+10.5.  Phase 4: Full Expansion
+
+   The fourth digit of the NPA is opened to all values 0 through 9,
+   increasing numbering capacity.
+
+
+
+Robinson                 Expires 31 October 2026                [Page 9]
+
+Internet-Draft               NANP Expansion                   April 2026
+
+
+11.  Alternatives Considered
+
+   The following alternatives were evaluated:
+
+11.1.  Further subdivision of number pooling blocks
+
+   Further subdivision of pooling blocks provides only limited extension
+   while increasing database and administrative complexity.
+
+11.2.  Expansion using only reserved NPA ranges (e.g., N9X)
+
+   If the rest of the available NPAs are exhausted, this becomes a stop-
+   gap measure until this or some other planned expansion of the
+   telephone number to 11 digits.
+
+11.3.  Overlay NPAs
+
+   Originally each NPA covered one region exclusively.  As more
+   telephone numbers were needed, more NXXs were added until no more
+   were available.  The answer at that point is to split the NPA, take
+   about half the NXXs that were geographically adjacent to each other,
+   and assign them to the new NPA.  The advantage was the subscriber
+   number did not change, so local seven-digit dialing was unaffected,
+   and the subscriber simply had to advise people that their area code
+   had changed.  This practice worked when regions were large and the
+   remaining regions after the split are of a reasonable size.  When
+   they are city-sized or smaller, splitting NPAs produces a point of
+   diminishing returns, where an NPA might only be part of a city.
+
+   The switch to overlays alleviated this problem as now the combined
+   number pool of both NPAs is available for the entire region.  It also
+   ends the dilemma of an NPA in jeopardy status being split, with one
+   NPA having more than sufficient available NXXs and the other
+   remaining in jeopardy.  Overlays were inevitable and solved the
+   problem of an NXX surplus/starvation NPA split result dilemma.
+
+   While overlays are useful, and it is very likely new NPAs will be
+   added as overlays to existing regions, they won't be enough to solve
+   the problem when it is not NXXs that are in jeopardy, but NPAs.
+
+11.4.  Variable-length numbering schemes
+
+   These approaches introduce significant implementation complexity,
+   increase validation burden across systems, and may negatively affect
+   user perception of numbering uniformity.
+
+   These approaches either provide limited long-term benefit or
+   introduce undesirable complexity.
+
+
+
+Robinson                 Expires 31 October 2026               [Page 10]
+
+Internet-Draft               NANP Expansion                   April 2026
+
+
+11.5.  Expansion Of NXX To NXXX
+
+   The expansion of the subscriber number to 8 digits by increasing the
+   size of the NXX to four digits was considered, but it creates an even
+   larger disruption:
+
+   *  The number of NXXs in an NPA rises from slightly under 800 to
+      nearly 8,000.  It would vastly increase the size and complexity of
+      local number portability databases
+
+   *  It would also increase the number and size of call routing tables
+
+   *  Third parties would have to update software for holding much
+      larger number ranges
+
+   *  The number of potential telephone numbers in an area code rises
+      from around 7,000,000 to nearly 70,000,000
+
+   *  In most regions this would cause each area code in the state to be
+      many times greater than the entire population of the region served
+      by that NPA.  Much of the additional capacity would be unusable or
+      wasted.
+
+11.6.  Expansion Of XXXX To XXXXX
+
+   The expansion of the line number to 5 digits adds even more
+   complexity and potentially even greater added costs than expanding
+   the NXX to 4 digits:
+
+   *  Even larger number portability databases, as each NXX expands by a
+      factor of 10
+
+   *  Local switches have to handle not potentially 10,000 lines for
+      each NXX they service, but 100,000
+
+   It is entirely possible switch hardware cannot support this large a
+   number pool, either rewiring replacement or upgrading expensive
+   switching equipment.  It may require splitting NXXs onto multiple
+   switches and require even more routing changes to accommodate.  In
+   heavily populated urban areas it might require acquisition of 
+   additional expensive switches, real estate, and buildings.
+
+12.  Operational Considerations
+
+   The proposed expansion is designed to minimize impact on:
+
+   *  Call routing systems
+
+
+
+
+Robinson                 Expires 31 October 2026               [Page 11]
+
+Internet-Draft               NANP Expansion                   April 2026
+
+
+   *  Number portability databases
+
+   *  Inter-carrier signaling
+
+   However, significant updates would be required in:
+
+   *  Customer-facing systems
+
+   *  Validation logic
+
+   *  Legacy equipment and embedded systems
+
+   A question that may arise is "Why not allow the full number range of
+   0-9 in the fourth digit of the telephone number to be activated
+   immediately, rather than the current proposal to initially only
+   permit a single digit?"
+
+   The rationale is cost and complexity.  Initial deployment using a
+   single digit minimizes required routing changes.  This proposal
+   acknowledges \ that significant costs would be involved in moving to
+   an 11-digit telephone number.  Eventually, the change must happen.
+   The fact remains, initially implementing only one digit generates the
+   least amount of cost increase, as only the routing logic of the
+   fourth digit of the telephone number is required to be changed.
+   Later, when digits 2-9 are enabled, the code required to check the
+   fourth digit can then be eliminated.  Thus, this also reduces the
+   complexity involved in making this change.
+
+13.  Backwards Compatibility Risks
+
+   There will need to be lead time to account for, and attention placed
+   on informing owners of systems that may need to be replaced because
+   of incapacity to update them to use the new format telephone number,
+   such as systems using:
+
+   *  Hard-coded 10-digit fields
+
+   *  Regular expression validation failure
+
+   *  Embedded devices
+
+   Emergency equipment that sends "final warnings" or notifications need
+   to be considered:
+
+   *  Elevator telephones
+
+   *  Audible Burglar alarms
+
+
+
+
+Robinson                 Expires 31 October 2026               [Page 12]
+
+Internet-Draft               NANP Expansion                   April 2026
+
+
+   *  Silent alarms
+
+   *  Credit/debit card processing terminals in places where Internet
+      connections are unavailable
+
+   *  Roadside motorist assistance telephones
+
+   Civil emergency response centers will have critical need to make
+   certain proper expansion and adjustment is done for:
+
+   *  911/E-911 routing
+
+   *  PSAP systems
+
+   *  ALI/ANI databases
+
+   Number portability and carrier identification databases must be
+   adjusted to compensate for this change:
+
+   *  LNP databases are massive, and may require updates to database
+      schemas and query logic in both SQL and NoSQL implementations
+
+   *  Key lookup structures are dependent on current NPA-NXX format
+
+   One advantage this proposal provides is it requires no change to NXX
+   format, preserving existing LNP granularity.
+
+14.  Benefits
+
+   The current NPA format allows a maximum of 800 NPAs to be implemented
+   (200-999).  However, practical considerations reduce this in several
+   ways:
+
+   *  X11 codes (211, 311, 911 etc.) are unavailable
+
+   *  988 as an additional N11-style number (and possibly others in the
+      future) will reduce the supply further
+
+   *  N9X was reserved for future expansion.
+
+   Given these constraints, the maximum number of NPAs is probably more
+   like 700.  While this is a large number, it eventually will be
+   exhausted, possibly within the foreseeable future.
+
+   Expansion of area codes to add an extra digit, and later full
+   expansion to 11-digits expands the numbering range by a full factor
+   of magnitude, to 8000 possible NPAXs.  Assuming similar carve-outs
+   are used:
+
+
+
+Robinson                 Expires 31 October 2026               [Page 13]
+
+Internet-Draft               NANP Expansion                   April 2026
+
+
+   *  N11X is reserved to prevent confusion
+
+   *  988X is also reserved
+
+   *  Other similar service codes to 988 (200, 766, 322, 433 etc) are
+      created, and those code ranges are restricted, e.g. 200X, 322X,
+      433X
+
+   *  N9XX is reserved for future expansion
+
+   It still leaves a huge pool of available NPAXs.  If the X11X, 988X,
+   and 10 additional service code code blocks are reserved, in addition
+   to N9XX, we have
+
+   *  72 NPAXs restricted for N11X protection
+
+   *  110 NPAXs restricted for 988X protection and 10 additional service
+      code blocks
+
+   *  800 NPAXs reserved for N9XX expansion
+
+   Leaves more than 7,000 potential NPAXs available for assignment.
+   This represents an approximate order-of-magnitude increase in
+   addressable numbering capacity compared to the current NANP
+   structure.
+
+15.  Economic Considerations
+
+15.1.  Cost Considerations Of Methods Used
+
+   Incremental approaches distribute cost over time but increase long-
+   term complexity.  A planned expansion incurs higher initial cost but
+   may reduce cumulative cost and operational burden.
+
+   Early planning enables gradual transition and reduces the risk of
+   emergency implementation.
+
+15.2.  Billing and Rating Impact
+
+   Carriers price call charges (including call origination and
+   termination payments) on
+
+   *  NPA-NXX
+
+   *  LATA boundaries
+
+
+
+
+
+
+Robinson                 Expires 31 October 2026               [Page 14]
+
+Internet-Draft               NANP Expansion                   April 2026
+
+
+   Other than increasing the length of the NPA and temporarily carrying
+   duplicate records (one for the old 3-digit NPA, and one for its
+   replacement NPAX during phases 1 through 3 (much of which can be
+   automated) these impacts are expected to be minimal due to
+   preservation of the NPA-NXX structure used in existing billing and
+   rating systems.
+
+16.  Security Considerations
+
+   Changes to numbering formats may impact fraud detection systems, call
+   validation mechanisms, and authentication processes.  These impacts
+   SHOULD be evaluated during implementation planning.
+
+   Number spoofing detection systems, including but not limited to STIR/
+   SHAKEN authentication to take into account both the current, and
+   replacement numbers.
+
+   Call authentication assumptions MUST be reviewed and updated to
+   ensure compatibility with both legacy and expanded numbering formats.
+   This represents an approximate order-of-magnitude increase in
+   addressable numbering capacity compared to the current NANP
+   structure.
+
+17.  Transition Governance
+
+   One or more coordinating authorities MUST be designated to manage key
+   aspects of the transition.  These include:
+
+   *  Whether the NPAX flag digit in position 4 of the telephone number
+      is 0 or 1
+
+   *  Timeline for start and implementation of each phase and segment of
+      the upgrade plan
+
+   *  Who will be responsible for enforcing compliance with all
+      mandates?
+
+18.  Transition Difficulties
+
+   Not all parties involved in the transition will necessarily act as
+   expeditiously as possible.  Concerns over depreciation or
+   amortization of existing equipment and/or  software will be a serious
+   concern to various organizations and responsible  individuals.  This
+   may result in compatibility problems with respect to
+
+   *  "Long tail" legacy systems
+
+   *  Private Branch Exchange (PBX) systems
+
+
+
+Robinson                 Expires 31 October 2026               [Page 15]
+
+Internet-Draft               NANP Expansion                   April 2026
+
+
+   *  International interoperability lag
+
+   As a result, partial deployment conditions may persist long after
+   others are fully ready for the changes as a result of the
+   implementation of 11-digit telephone numbers.
+
+19.  International Considerations
+
+   The proposed 11-digit format remains compatible with the E.164 [ITU]
+   maximum length of 15 digits.  Coordination with international
+   carriers and regulatory bodies is required.
+
+   *  This change poses no impact to global numbering compatibility
+
+   *  It fits into the existing +1 country code model
+
+   No changes to the E.164 country code (+1) are required.
+
+20.  IANA Considerations
+
+   This document has no IANA actions.
+
+21.  Conclusion
+
+   Expansion of the NANP to 11 digits represents a viable long-term
+   solution to numbering exhaustion.  Early evaluation and planning are
+   recommended to enable a controlled and gradual transition.
+
+   Given the long lead times required for numbering plan changes, early
+   evaluation is necessary to avoid time-constrained or emergency
+   implementation.
+
+22.  References
+
+22.1.  Normative References
+
+   [ITU]      International Telecommunications Union, "The international
+              public telecommunication numbering plan Recommendation
+              ITU-T E.164", November 2010, <https://www.itu.int/rec/
+              dologin_pub.asp?lang=e&id=T-REC-E.164-201011-I!!PDF-
+              E&type=items>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+
+
+
+
+Robinson                 Expires 31 October 2026               [Page 16]
+
+Internet-Draft               NANP Expansion                   April 2026
+
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+22.2.  Informative References
+
+   [RFC1394]  Robinson, P., "Relationship of Telex Answerback Codes to
+              Internet Domains", RFC 1394, DOI 10.17487/RFC1394, January
+              1993, <https://www.rfc-editor.org/rfc/rfc1394>.
+
+Appendix A.  Changelog
+
+   draft-00:
+
+   *  Initial Release
+
+   draft-01:
+
+   *  correct misspelling: allowsexisting -> allows existing
+   *  Explain drawbacks of some alternative strategies
+   *  Adjust line lengths to improve ease if editing, to take
+      advantage of kramdown-rfc and xml2rfc automatic reformatting
+
+Author's Address
+
+   Paul Robinson
+   Email: comments@11digitdialing.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Robinson                 Expires 31 October 2026               [Page 17]

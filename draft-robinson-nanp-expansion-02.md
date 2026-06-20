@@ -1,0 +1,908 @@
+---
+title: >
+    A Proposal for Long-Term Expansion of the North American
+               Numbering Plan (NANP) to 11 Digits
+abbrev: NANP Expansion
+docname: draft-robinson-nanp-expansion-02
+category: info
+date: 2026-06-20
+wg: Network Working Group
+
+ipr: trust200902
+keyword: Internet-Draft
+area: General
+submissiontype: independent
+workgroup: Independent
+
+stand_alone: true
+pi:
+   toc: yes
+   tocdepth: 3
+   sortrefs: yes
+   symrefs: yes
+venue:
+   github: electric-socket/11digitdialing
+
+author:
+  - ins: P. Robinson
+    name: Paul Robinson
+    email: comments@11digitdialing.com
+
+normative:
+  RFC2119:
+  RFC8174:
+  ITU:
+   author:
+     - org: International Telecommunications Union
+   title: "The international public telecommunication numbering plan Recommendation ITU-T E.164"
+   date: November 2010
+   format:
+      PDF: https://www.itu.int/rec/dologin_pub.asp?lang=e&id=T-REC-E.164-201011-I!!PDF-E&type=items
+  NANPA-OCT2025:
+   author:
+     - org: North American Numbering Plan Administrator
+   title: "October 2025 North American Numbering Plan (NANP) Exhaust Analysis"
+   date: October 2025
+   format:
+      PDF: https://www.nanpa.com/sites/default/files/2025-10/October_2025_NANP_Exhaust_Analysis_Final.pdf
+  NANPA-APR2025:
+   author:
+     - org: North American Numbering Plan Administrator
+   title: "April 2025 North American Numbering Plan (NANP) Exhaust Analysis"
+   date: April 2025
+   format:
+      PDF: https://www.nanpa.com/sites/default/files/2025-04/April_2025_NANP_Exhaust_Analysis_Final.pdf
+    
+
+informative:
+   RFC1394:
+ 
+--- abstract 
+
+The North American Numbering Plan (NANP) is projected to exhaust 
+available telephone numbering resources within the coming decades under
+current allocation and utilization trends. Existing mitigation 
+strategies, including area code overlays and number pooling, extend the
+usable life of the NANP but introduce increasing operational complexity 
+and user confusion.
+
+This document proposes a long-term, uniform expansion of NANP telephone 
+numbers from 10 to 11 digits through extension of the area code or 
+Numbering Plan Area (NPA) from 3 to 4 digits. The  proposal emphasizes 
+backward compatibility, fixed-length numbering, and a multi-phase 
+transition strategy designed to minimize disruption.  This document is 
+intended to stimulate discussion and does not represent the position of
+any standards body or regulatory authority.
+
+--- middle
+
+# Executive Summary
+
+The North American Numbering Plan (NANP), which governs the 10-digit telephone 
+numbers used across the US, Canada, and partner nations, faces eventual 
+exhaustion of its numbering capacity. Current stopgap measures — area code 
+overlays and number pooling — extend the system's lifespan but compound 
+routing complexity and degrade user experience. 
+
+## The Core Proposal 
+
+This document proposes expanding NANP telephone numbers from 10 to 11 digits by 
+enlarging the area code field from three digits to four digits:
+
+Current:  NPA-NXX-XXXX
+Proposed: NPAX-NXX-XXXX
+
+The central design choice is to preserve fixed-length, fixed-position 
+parsing. During the initial transition, the added fourth area-code digit 
+would be uniformly limited to either 0 or 1, because current NANP NXX prefixes 
+begin with digits 2 through 9. That lets switching systems distinguish old 
+10-digit numbers from new 11-digit numbers by examining the fourth digit, 
+avoiding variable-length dialing, timing ambiguity, or major changes to 
+downstream routing logic.
+
+Rather than altering the subscriber number or prefix (NXX), the proposal extends 
+only the area code field. Since the NXX of a subscriber telephone number cannot 
+start with 0 or 1, that is used to modify the area code (NPA), by appending it 
+with either a 0 or a 1. A number like 213-555-1234 would become 2130-555-1234 or 
+2131-555-1234. The fourth digit is initially restricted to 0 or 1, which allows 
+switching systems to distinguish new 11-digit numbers from legacy 10-digit numbers 
+by a simple positional check — no timing-based or variable-length parsing required. 
+In a later phase, digits 2–9 would be unlocked, expanding total addressable area 
+codes roughly tenfold (from ~700 usable NPAs today to over 7,000 NPAXs).
+
+## Why This Approach
+
+The proposal explicitly rejects several alternatives — expanding 
+the subscriber prefix or line number, variable-length numbering, and relying solely 
+on reserved NPA ranges — on grounds that each would impose greater infrastructure cost, 
+database bloat, or user disruption than the NPA extension approach. The NXX and XXXX 
+fields are left entirely unchanged, which preserves existing routing tables and local 
+number portability (LNP) database schemas.
+
+## Transition Strategy 
+
+The proposal outlines a five-phase migration:
+
+- Phase 0 — Silent infrastructure readiness (networks updated, no public announcement)
+- Phase 1 — Dual-format acceptance (both 10- and 11-digit numbers routed simultaneously)
+- Phase 2 — Public notification, first via announcement, then via intercept warnings on 
+legacy 10-digit calls (calls still complete)
+- Phase 3 — Mandatory 11-digit dialing (legacy format calls rejected with a SIT-tone 
+intercept)
+- Phase 4 — Full expansion (fourth digit opened to 0–9, unlocking the complete numbering pool)
+
+## Alternatives Considered and Rejected 
+
+The document evaluates and dismisses further number pooling subdivision, overlay-only strategies, 
+variable-length numbering, expansion of the NXX to four digits, and expansion of the line number 
+to five digits. Each alternative either provides insufficient long-term relief or introduces greater 
+disruption to routing infrastructure, portability databases, and switch hardware than the NPAX approach.
+
+## Key Risks
+
+Backward compatibility is the primary concern. Hard-coded 10-digit fields in software, 
+embedded devices (elevator phones, alarm systems, card terminals), 911/E-911/PSAP infrastructure, and 
+legacy PBX systems will all require remediation. Security systems such as STIR/SHAKEN call authentication 
+must be updated to handle both formats during transition. The draft stresses early planning to avoid a 
+time-pressured implementation.
+
+## Scope
+
+The proposed format remains within the ITU-T E.164 15-digit maximum and requires no change to 
+the +1 country code. This document is an informational discussion draft and does not represent the 
+position of any standards body or regulatory authority.
+
+# Introduction
+
+The NANP currently utilizes a fixed-length 10-digit numbering format
+(NPA-NXX-XXXX). Growth in telecommunications services, device 
+proliferation, and number portability has steadily increased demand for
+numbering resources.
+
+Mitigation strategies such as overlays and thousands-block number 
+pooling have delayed exhaustion but introduce increasing complexity in
+routing, administration, and user experience.
+
+This document explores a uniform expansion of NANP numbers to 11 digits
+as a long-term solution.
+
+This proposal preserves fixed-position digit parsing, avoiding variable-length 
+interpretation and timing-based ambiguity. This property is a primary design 
+objective, as it minimizes required changes to existing switching and routing infrastructure.
+
+# Requirements Language
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+"MAY", and "OPTIONAL" in this document are to be interpreted as
+described in BCP 14 {{!RFC2119}} {{!RFC8174}} when, and only when, they
+appear in all capitals, as shown here.
+
+# Definitions
+
+CP:
+: is Cellular Provider, the service provider for a caller using cellular 
+telephony.
+
+IXC:
+: Interexchange Carrier - the organization that carries a call between
+the caller's service provider and the called party's service provider 
+where the caller's service provider does not serve the area of the 
+called party.
+
+Jeopardy: 
+: Jeopardy is the condition where an NPA is in danger of running out of available NXXs to use for new telephone subscribers, requiring a freeze on the issuance of further subscriber numbers in that NPA until more NXXs become available.
+
+LEC:
+: Local Exchange Carrier, the service provider for a caller using a 
+landline or VoIP service, the organization that provides dial tone and
+carries a call to the called party where they are within the service 
+area of the LEC, or transfers the call to an IXC when the called party
+is outside its service area.
+
+N versus X:
+: In the context of a telephone number, N is used to indicate a digit
+that is restricted to values of 2 through 9, while X indicates an 
+unrestricted digit with values 0 through 9.
+
+NPA:
+: The area code, or first three digits of the 10-digit telephone number. This 
+document will use both 'area code' and 'NPA' interchangeably, generally with 
+NPA used when discussing technical and implementation issues, and area code 
+being used when discussing issues faced by subscribers and the public.
+
+NPAX:
+: The new area code, or first four digits of the new 11-digit telephone
+number. This proposal recommends expansion of the NPA field by 1 digit 
+and provides an expansion of the entire telephone number to 11 digits.
+
+NXX:
+: The prefix, or digits four through six of the 10-digit telephone 
+number, or first three digits of the subscriber number. This field is 
+to remain unchanged, but is moved to digits five through seven of the 
+new 11-digit telephone number.
+
+SIT tone:
+: A Special Information Tone (SIT) is a standardized, three-beep audio
+signal (typically 950/1400/1800 Hz) played before a recorded 
+announcement to indicate a telephone call has failed.
+
+Subscriber number:
+: The portion of the telephone number following the NPA or NPAX. It 
+remains unchanged at seven digits, but is moved from positions four
+through ten of the telephone number, to positions five through eleven.
+
+Telephone number:
+: The entire number of the party to be called, consisting of either
+
+- On 10-digit systems, the three-digit NPA, three-digit NXX, and 
+four-digit XXXX.
+
+- On 11-digit systems, the four-digit NPAX, three-digit NXX, and 
+four-digit XXXX.
+
+VoIP:
+: Voice Over IP, or telephone service where the call initiates from or
+terminates via the Internet.
+
+XXXX:
+: The last four digits of the subscriber number, or line number, digits
+seven through ten of the 10-digit telephone number. This field is also 
+to remain unchanged, but is moved to digits eight through eleven of the 
+new 11-digit telephone number.
+
+# Problem Statement
+
+The finite capacity of the current NANP is not a hypothetical concern 
+but an eventual certainty. According to {{NANPA-OCT2025}} NANPA's October 
+2025 NANP Exhaust Analysis [NANPA-2025-10], the NANP is projected to exhaust 
+available numbering resources between 2052 and 2060, depending on demand 
+growth rates. The baseline projection, using an average annual CO code 
+demand of 5,213 codes, places exhaustion in 2060. A sensitivity analysis 
+using demand 20% above baseline projects exhaustion as early as 2052. These 
+projections assume a pool of 680 usable NPAs; the remainder of the 800-NPA 
+address space is reserved or unavailable, including 80 NPAs explicitly held 
+in reserve for future NANP expansion — an implicit acknowledgment by the 
+standards community that structural expansion will eventually be required.  
+This is an even shorter timeline than estimated in {{NANPA-APR2025}}, only six months earlier.
+
+The current NANP faces several challenges:
+
+- Finite NPA capacity under existing numbering rules
+- Fragmentation of numbering resources due to allocation practices
+- Growing operational complexity in routing and database systems
+- Long lead times required for major numbering plan changes
+
+A long-term solution should address these challenges while preserving fixed-length 
+numbering. Variable-length telephone number schemes are explicitly rejected: they introduce 
+timing-based ambiguity, complicate digit analysis at every layer of the switching and routing 
+stack, increase validation burden across interconnected systems, and create inconsistent user 
+experiences across regions and carriers. Fixed-length numbering is a foundational property of 
+the NANP and must be preserved in any expansion.
+
+All feasible approaches to expanding NANP numbering capacity introduce some degree of 
+disruption. The proposed expansion of the NPA is considered the least disruptive option, as it 
+preserves the existing hierarchical structure of the numbering plan and minimizes changes to 
+subscriber numbering and routing semantics.
+
+# Design Goals
+
+The proposed solution is guided by the following goals:
+
+- Maintain fixed-length numbering
+- Minimize changes to existing routing logic
+- Preserve compatibility with existing numbering structures
+ 
+# Non-Goals
+
+The following approaches are explicitly not considered desirable:
+
+- Variable-length telephone numbers
+- Region-specific numbering formats
+- Frequent or repeated structural changes to the numbering plan
+- Solutions requiring rapid or "flash cut" transitions
+
+# Proposed Expansion Model
+
+This document is a proposal to expand NANP numbers from 10 to 11 digits by extending the NPA from three digits to four digits. This ensures that existing fixed-position digit parsing logic can be extended with minimal modification, avoiding the need for timing-based or variable-length interpretation.
+
+Existing numbers:
+
+      NPA-NXX-XXXX
+
+Expanded format:
+
+      NPAX-NXX-XXXX
+
+During initial deployment, the fourth digit added to the NPA to form 
+the NPAX MUST be selected such that it does not conflict with existing
+digit patterns used to identify the first digit of NXX codes. Under
+current NANP rules, the first digit of an NXX is restricted to values
+2 through 9.
+
+By selecting 0 or 1 for the additional NPA digit, the boundary between
+the expanded NPAX and the following NXX remains unambiguous. This 
+allows existing digit analysis algorithms to distinguish between legacy
+10-digit and expanded 11-digit numbers using a simple examination of
+the fourth digit.
+
+Restricting the fourth digit initially to a single value minimizes required changes to routing logic and reduces deployment cost.
+
+This property allows existing fixed-position digit analysis logic to 
+be extended with minimal modification, avoiding the need for timing-
+based disambiguation, interdigit timeout adjustments, or variable-
+length parsing mechanisms.
+
+A single value (0 or 1) SHALL be used consistently across all NPAs 
+during the initial deployment phase to ensure uniform behavior across
+networks. Uniformity avoids user confusion, simplifies parsing, and 
+prevents mixed national behavior during migration.
+
+Example:
+
+      213-555-1234  (legacy)
+
+      2130-555-1234 (expanded)
+
+Or:
+
+      303-555-1234  (legacy)
+
+      3031-555-1234 (expanded)
+
+A telephone switching system processes a telephone number using the 
+following logic:
+
+1. Scan fourth digit of number.
+1. If 0 or 1, process as NPAX.
+1. Else, process as NXX.
+
+This proposal preserves the semantic structure of the number.
+
+- The NPAX field preserves the existing role of the NPA field, 
+whether geographic, overlay, toll-free, or service-specific.
+- NXX is still used as the routing block.
+- XXXX is still the subscriber line number.
+
+The widespread adoption of overlay area codes has fundamentally 
+altered the NANP environment. A return to strictly geographic, 
+non-overlapping area codes is no longer practical. The proposed 
+approach assumes the continued existence of overlays and does not 
+attempt to reverse this trend.
+
+The designation of 988 as a nationwide service code required the 
+elimination of 7-digit dialing in affected areas, accelerating the 
+transition to uniform 10-digit dialing across the NANP. As a result, 
+this proposal does not impact legacy 7-digit dialing, as that 
+capability has already been largely eliminated.
+
+This approach ensures that numbering expansion occurs at the highest
+level of the NANP hierarchy, avoiding disruption to lower-level 
+components such as routing prefixes and subscriber numbers.
+
+This method preserves fixed-field positional parsing, avoiding the need for timing-based digit collection or variable-length interpretation, which are known sources of complexity and error in telephony systems.
+
+# Human Factors
+
+During and after transition, published numbers SHOULD be displayed in
+hyphenated 4-3-4 form (e.g., 2130-555-1234). Users will find this 
+format similar to the existing 3-3-4 format, and are expected to adapt 
+to the new format following the patterns observed during the transition
+to mandatory 10-digit dialing. Contact storage systems, dialing interfaces, and automated dialing features are expected to adapt with minimal modification due to the preserved fixed-length structure.
+
+# Routing Considerations
+
+Existing routing systems rely on fixed field positions within the NANP
+number. The proposed expansion preserves the relative position of the 
+NXX and subscriber line number fields, allowing for minimal 
+modification to routing logic.
+
+Systems that perform digit analysis MUST be updated to recognize the NPAX 
+format. This includes SS7-based switching systems (the signaling protocols 
+used to route calls across telephone networks), SIP routing platforms, 
+and number portability databases.
+
+These updates are limited to recognition of the fourth digit as a format 
+discriminator and do not require changes to downstream routing logic based 
+on NXX or subscriber number.
+
+# Potential Misunderstandings
+
+Historically, the leading domestic prefix "1" served a toll-alert or 
+toll-access function. It warned the caller, and the network, that the 
+call was being placed outside the local calling area and might incur 
+higher charges. This distinction mattered when local calls were flat-rate 
+or inexpensive while toll calls could be substantially more expensive.
+
+That function has diminished in modern wireless, VoIP, and bundled calling 
+environments, where calls are often rated independently of whether the caller 
+dialed a leading "1". Accordingly, this proposal treats the leading "1" as an 
+optional domestic dialing prefix or legacy access convention, not as part of 
+the NANP telephone number.
+
+Under this proposal, the NANP subscriber number expands from 10 digits
+to 11 digits:
+
+   NPAX-NXX-XXXX
+
+Some legacy systems or carrier arrangements may continue to accept or require 
+a leading domestic prefix, commonly "1", before the NANP number. In that case, 
+the dialed digit sequence may contain 12 digits:
+
+   1-NPAX-NXX-XXXX
+
+However, the leading "1" is not part of the NANP telephone number itself. Many 
+wireless and VoIP systems already accept calls with or without this prefix, and 
+this proposal does not require any change to that behavior.
+
+# Transition Strategy
+
+A phased transition is recommended:
+
+## Phase 0: Infrastructure Readiness
+
+Networks and systems are updated to support 11-digit numbers without 
+public announcement. Switching systems MUST be updated to recognize and
+correctly route NPAX-based numbers during Phase 0.
+
+The restriction of the fourth digit to 0 or 1 is bridge logic.  It is
+not intended to be a permanent numbering constraint.  During the
+transition period, it permits legacy 10-digit NANP numbers and expanded
+11-digit NANP numbers to coexist without variable-length ambiguity, simply
+by examining the fourth digit of the telephone number. Once 11-digit dialing 
+becomes mandatory and legacy 10-digit dialing is retired for ordinary call 
+completion, the bridge logic is no longer required.  At that point, the fourth 
+digit of the NPAX may be opened to additional values under the ordinary NANP 
+assignment process.
+
+There SHOULD be some cross-network communication system such as a 
+website, a mailing list, a help desk, and/or other method for parties 
+involved in the conversion to report progress and to obtain information
+helpful in diagnosing problems, issues and events that may require 
+special attention or otherwise require additional resources for 
+resolution. This SHOULD be provided or operated by a neutral third-party.
+
+## Phase 1: Dual-Format Acceptance
+
+Both 10-digit and 11-digit dialing are accepted by all CPs, IXCs, and 
+LECs. All originating and terminating networks MUST accept both 
+formats.
+
+## Phase 2: User Notification
+ 
+Phase 2 is implemented as two segments. 
+
+### Segment 1
+
+In Segment 1 of Phase 2, LECs, CPs, IXCs, and regulatory authorities 
+MUST publicize the implementation of the expansion of the NPA to an 
+NPAX, where the area code is expanded to four digits, and the 
+telephone number to eleven digits. An important highlight of the 
+announcement SHOULD emphasize that there will be no change to the 
+subscriber number. It SHOULD also state the date Segment 2 will begin
+and the date that phase 3 will begin.
+
+### Segment 2
+
+In Segment 2 of Phase 2, Intercept messages SHALL be imposed on callers
+dialing a 10-digit phone number, and such message SHALL inform callers 
+dialing telephone numbers using the current 10-digit format of upcoming
+requirements, MAY inform them of the digit they need to append to 
+the area code, and SHOULD state the date when dialing the new 11-digit 
+number will be required. The call SHALL still complete.
+
+## Phase 3: Mandatory Expansion
+
+11-digit dialing becomes required. Callers dialing the old format 
+10-digit number SHALL be presented with an intercept message beginning
+with a SIT tone and an announcement that they must dial the new 4-digit
+area code. The message MAY announce the additional digit that MUST be 
+dialed. The call SHALL NOT complete, and SHALL be treated equivalently 
+to dialing an invalid number.
+
+## Phase 4: Full Expansion
+
+The fourth digit of the NPA is opened to all values 0 through 9, 
+increasing numbering capacity.
+
+Phase 4 MUST NOT begin until 10-digit dialing has been retired for
+ordinary call completion.  At that point, all NANP numbers are parsed as
+NPAX-NXX-XXXX, and the fourth digit is no longer needed to distinguish
+legacy and expanded formats.
+
+# Alternatives Considered
+
+The following alternatives were evaluated:
+
+## Further subdivision of number pooling blocks
+
+Further subdivision of pooling blocks provides only limited extension 
+while increasing database and administrative complexity.
+
+## Expansion using only reserved NPA ranges (e.g., N9X)
+
+If the rest of the available NPAs are exhausted, this becomes a stop-
+gap measure until this or some other planned expansion of the 
+telephone number to 11 digits.
+
+## Overlay NPAs
+
+Originally each NPA covered one region exclusively. As more telephone numbers 
+were needed, more NXXs were added until no more were available. The answer at 
+that point is to split the NPA, take about half the NXXs that were geographically 
+adjacent to each other, and assign them to the new NPA. The advantage was the 
+subscriber number did not change, so local seven-digit dialing was unaffected, 
+and the subscriber simply had to advise people that their area code had changed. 
+This practice worked when regions were large and the remaining regions after the 
+split are of a reasonable size. When they are city-sized or smaller, splitting 
+NPAs produces a point of diminishing returns, where an NPA might only be part of 
+a city.
+
+The switch to overlays alleviated this problem as now the combined number pool of 
+both NPAs is available for the entire region. It also ends the dilemma of an NPA 
+in jeopardy status being split, with one NPA having more than sufficient available 
+NXXs and the other remaining in jeopardy. Overlays were inevitable and solved the 
+problem of an NXX surplus/starvation NPA split result dilemma.
+
+While overlays are useful, and it is very likely new NPAs will be added as overlays 
+to existing regions, they won't be enough to solve the problem when it is not NXXs 
+that are in jeopardy, but NPAs.
+
+## Variable-length numbering schemes
+
+These approaches introduce significant implementation complexity, 
+increase validation burden across systems, and may negatively affect
+user perception of numbering uniformity.
+
+These approaches either provide limited long-term benefit or introduce
+undesirable complexity.
+
+## Expansion Of NXX To NXXX
+
+The expansion of the subscriber number to 8 digits by increasing the size 
+of the NXX to four digits was considered, but it creates an even larger disruption:
+
+- The number of NXXs in an NPA rises from slightly under 800 to nearly 8,000. 
+It would vastly increase the size and complexity of local number portability databases
+- It would also increase the number and size of call routing tables
+- Third parties would have to update software for holding much larger number 
+ranges
+- The number of potential telephone numbers in an area code rises from 
+around 7,000,000 to nearly 70,000,000
+- In most regions this would cause each area code in the state to be 
+many times greater than the entire population of the region served by 
+that NPA. Much of the additional capacity would be unusable or wasted.
+
+## Expansion Of XXXX To XXXXX
+
+The expansion of the line number to 5 digits adds even more 
+complexity and potentially even greater added costs than expanding 
+the NXX to 4 digits:
+
+- Even larger number portability databases, as each NXX expands by 
+a factor of 10
+- Local switches have to handle not potentially 10,000 lines for each 
+NXX they service, but 100,000
+
+It is entirely possible switch hardware cannot support this large 
+a number pool, either rewiring replacement or upgrading expensive 
+switching equipment. It may require splitting NXXs onto multiple 
+switches and require even more routing changes to accommodate. In 
+heavily populated urban areas it might require acquisition of 
+additional expensive switches, real estate, and buildings.
+
+# Operational Considerations
+
+The proposed expansion is designed to minimize impact on:
+
+- Call routing systems
+- Number portability databases
+- Inter-carrier signaling
+
+However, significant updates would be required in:
+
+- Customer-facing systems
+- Validation logic
+- Legacy equipment and embedded systems
+
+A question that may arise is "Why not allow the full number range 
+of 0-9 in the fourth digit of the telephone number to be activated 
+immediately, rather than the current proposal to initially only 
+permit a single digit?"
+
+The rationale is cost and complexity. Initial deployment using a single 
+digit minimizes required routing changes. This proposal acknowledges 
+that significant costs would be involved in moving to an 11-digit telephone 
+number. Eventually, the change must happen. The fact remains, initially 
+implementing only one digit generates the least amount of cost increase, 
+as only the routing logic of the fourth digit of the telephone number is 
+required to be changed. Later, when digits 2-9 are enabled, the code required 
+to check the fourth digit can then be eliminated. Thus, this also reduces the 
+complexity involved in making this change.
+
+# Backwards Compatibility Risks
+
+There will need to be lead time to account for, and attention placed on
+informing owners of systems that may need to be replaced because of 
+incapacity to update them to use the new format telephone number, such 
+as systems using:
+
+- Hard-coded 10-digit fields
+- Regular expression validation failure
+- Embedded devices
+
+Emergency equipment that sends "final warnings" or notifications need 
+to be considered:
+
+- Elevator telephones
+- Audible Burglar alarms
+- Silent alarms
+- Credit/debit card processing terminals in places where Internet 
+connections are unavailable
+- Roadside motorist assistance telephones
+
+Civil emergency response centers will have critical need to make 
+certain proper expansion and adjustment is done for:
+
+- 911/E-911 routing
+- PSAP systems
+- ALI/ANI databases
+
+Number portability and carrier identification databases must be adjusted
+to compensate for this change:
+
+- LNP databases are massive, and may require updates to database schemas 
+and query logic in both SQL and NoSQL implementations
+- Key lookup structures are dependent on current NPA-NXX format
+
+One advantage this proposal provides is it requires no change to NXX 
+format, preserving existing LNP granularity.
+
+# Benefits
+
+The current NPA format allows a maximum of 800 NPAs to be implemented 
+(200-999). However, practical considerations reduce this in several ways:
+
+- X11 codes (211, 311, 911 etc.) are unavailable
+- 988 as an additional N11-style number (and possibly others in the future) 
+will reduce the supply further
+- N9X was reserved for future expansion.
+
+Given these constraints, the maximum number of NPAs is probably more 
+like 700. While this is a large number, it eventually will be 
+exhausted, possibly within the foreseeable future.
+
+Expansion of area codes to add an extra digit, and later full expansion 
+to 11-digits expands the numbering range by a full factor of magnitude, 
+to 8000 possible NPAXs. Assuming similar carve-outs are used:
+
+- N11X is reserved to prevent confusion
+- 988X is also reserved
+- Other similar service codes to 988 (200, 766, 322, 433 etc) are 
+created, and those code ranges are restricted, e.g. 200X, 322X, 433X
+- N9XX is reserved for future expansion
+
+It still leaves a huge pool of available NPAXs. If the X11X, 988X, 
+and 10 additional service code code blocks are reserved, in 
+addition to N9XX, we have
+
+- 72 NPAXs restricted for N11X protection
+- 110 NPAXs restricted for 988X protection and 10 additional 
+service code blocks
+- 800 NPAXs reserved for N9XX expansion
+
+Leaves more than 7,000 potential NPAXs available for assignment. This 
+represents an approximate order-of-magnitude increase in addressable 
+numbering capacity compared to the current NANP structure.
+
+# Economic Considerations
+
+I am not ignoring that the change is going to be massive, and expensive. This 
+is why it is important to start thinking about the issue well in advance of 
+when action becomes mandatory, and to begin planning this change long before 
+it is necessary. An orderly transition on a long timetable with reachable 
+milestones and progress goals will be easier and less costly than an "under 
+the gun" rushed change because the deadline is approaching and we can't wait.
+
+The history of infrastructure transitions is littered with examples of "we'll 
+deal with it later" becoming "we're dealing with it in crisis mode at enormous 
+cost." The two closest analogies in the tech world are instructive:
+
+- The Internet address space IPv4 exhaustion is the cautionary tale. The internet 
+community knew for decades that 32-bit addresses would run out. IPv6 was standardized 
+in 1998. Here we are in 2026 and the transition is still incomplete — largely because 
+nobody acted until addresses were actually scarce, by which point the installed base 
+was so enormous that migration became enormously painful and expensive. The NANP is in 
+a similar position today: there's still time to plan, but that window won't stay open forever.
+- The problem caused by the near-universal use of six-digit date fields in computer
+systems resulted in the "Y2K" crisis when people realized date calculations were
+going to fail when the year 2000 arrived, possibly in a catastrophic fashion. While
+extreme effort prevented a disaster scenario, it still came at enormous cost, because 
+the work had to be done under severe time constraints. This would not have been 
+necessary if it was started earlier. Articles in trade magazines as far back as 1985 
+were warning about the upcoming problem, which was mostly ignored. Until it couldn't be.
+
+The 20- to 40-year timeframe for the upcoming exhaustion is the sweet spot for this kind 
+of change: long enough that a careful, phased transition is feasible, short enough that 
+"we'll get to it" is genuinely dangerous. The 20–40 year estimate is not a reason to wait, 
+but the reason to start now.
+
+## Advantages to Starting Early
+
+With 20-35 years of runway:
+
+- Vendors can absorb changes into normal product refresh cycles 
+rather than emergency patches
+- Carriers can budget capital expenditure in advance rather than emergency spending
+- Regulators can run proper notice-and-comment processes
+- Embedded systems — elevator phones, alarm dialers, card terminals — can be replaced 
+through natural attrition rather than forced recall
+- The standards process itself can work at a measured pace with time 
+for revision and refinement
+- Training, documentation, and public communication can be thoughtful rather than rushed
+
+With five years of runway, every single one of those becomes a crisis.
+
+## Cost Considerations Of Methods Used
+
+Incremental approaches distribute cost over time but increase long-term
+complexity.  A planned expansion incurs higher initial cost but may 
+reduce cumulative cost and operational burden.
+
+Early planning enables gradual transition and reduces the risk of 
+emergency implementation.
+
+## Billing and Rating Impact
+
+Carriers price call charges (including call origination and termination 
+payments) on
+
+- NPA-NXX
+- LATA boundaries
+
+Other than increasing the length of the NPA and temporarily carrying 
+duplicate records (one for the old 3-digit NPA, and one for its 
+replacement NPAX during phases 1 through 3 (much of which can be 
+automated) these impacts are expected to be minimal due to preservation 
+of the NPA-NXX structure used in existing billing and rating systems.
+
+## Stakeholder Impact
+
+
+
+# Security Considerations
+
+Changes to numbering formats may impact fraud detection systems, call 
+validation mechanisms, and authentication processes. These impacts 
+SHOULD be evaluated during implementation planning.
+
+Number spoofing detection systems, including but not limited to 
+STIR/SHAKEN authentication to take into account both the current, and
+replacement numbers. 
+
+Call authentication frameworks, robocall enforcement tools, 
+and carrier reputation systems all embed assumptions about 10-digit 
+number formats.
+
+Call authentication assumptions MUST be reviewed and updated to 
+ensure compatibility with both legacy and expanded numbering formats.
+This represents an approximate order-of-magnitude increase in addressable 
+numbering capacity compared to the current NANP structure.
+
+# Transition Governance
+
+Governance is arguably the hardest part of any NANP change. Prior transitions 
+(e.g., the 1995 area code relief plan, the 988 rollout) would be instructive 
+in preparation, management, and implementation of any solution to this issue.
+
+One or more coordinating authorities MUST be designated to manage key aspects 
+of the transition. These include:
+
+- Whether the NPAX flag digit in position 4 of the telephone number is 0 or 1
+- Timeline for start and implementation of each phase and segment of the 
+upgrade plan
+- Who will be responsible for enforcing compliance with all mandates?
+
+This could be a single organization, or a cooperative arrangement of regulatory 
+and operating companies (Carriers, Canada's CRTC, NANPA, Regulatory authorities 
+in other jurisdictions, U.S. FCC, etc.)
+
+# Transition Difficulties
+
+Not all parties involved in the transition will necessarily act as expeditiously 
+as possible. Concerns over depreciation or amortization of existing equipment and/or 
+software will be a serious concern to various organizations and responsible 
+individuals. This may result in compatibility problems with respect to
+
+- "Long tail" legacy systems
+- Private Branch Exchange (PBX) systems
+- International interoperability lag
+
+As a result, partial deployment conditions may persist long after 
+others are fully ready for the changes as a result of the implementation 
+of 11-digit telephone numbers.
+
+# International Considerations
+
+The proposed 11-digit format remains compatible with the E.164 {{ITU}}
+maximum length of 15 digits.  Coordination with international 
+carriers and regulatory bodies is required.
+
+- This change poses no impact to global numbering compatibility
+- It fits into the existing +1 country code model
+
+No changes to the E.164 country code (+1) are required.
+
+Coordination among over 25 international jurisdictions, state and 
+provincial regulators, and the ITU will need to be taken into account.
+
+#  IANA Considerations
+
+This document has no IANA actions.
+
+#  Conclusion
+
+Expansion of the NANP to 11 digits represents a viable long-term 
+solution to numbering exhaustion.  Early commitment to a transition 
+plan is essential to enable a controlled and gradual transition, and  
+avoid time-constrained or emergency implementation.
+
+Expansion of the NANP to 11 digits is not an immediate necessity — but it is 
+an eventual certainty. The question is not whether this transition will happen, 
+but whether it will be managed or improvised.
+
+With a projected exhaustion window of 2052 to 2060, the NANP community is in 
+a position that infrastructure planners rarely enjoy: enough lead time to do 
+this properly. A carefully designed, phased transition executed over 10 to 20 
+years allows vendors to absorb changes into normal product refresh cycles, carriers 
+to plan capital expenditure in advance, embedded systems to be replaced through 
+natural attrition, and the public to adapt gradually rather than abruptly. Regulatory 
+processes can proceed at a measured pace. Standards can be refined. Mistakes can be 
+caught and corrected before they propagate.
+
+That window is not permanent. The history of infrastructure transitions offers two 
+instructive examples. Y2K was resolved successfully — but only because the industry 
+mobilized with sufficient lead time, and it was still extraordinarily expensive and 
+stressful with years to spare. IPv4 address exhaustion is the alternative outcome: a 
+problem understood for decades, deferred until it became acute, and still incompletely 
+resolved thirty years after IPv6 was standardized.
+
+The NANP does not have to follow either path exactly. The lead time available today makes 
+a third outcome possible: a transition that is planned deliberately, implemented gradually, 
+and completed before urgency drives the agenda. Early evaluation and commitment to a structural 
+solution — of which this proposal is one candidate — is the prerequisite for that outcome.
+
+Given the long lead times required for numbering plan changes, the time to begin is now, while 
+beginning is still a choice.
+
+--- back
+
+# Changelog {#changelog}
+
+{:removeInRfc}
+
+draft-00:
+
+{: spacing="compact"}
+
+- Initial Release
+
+draft-01:
+
+{: spacing="compact"}
+
+- correct misspelling: allowsexisting -> allows existing  
+- Explain drawbacks of some alternative strategies
+- Adjust line lengths to improve ease if editing, to take 
+advantage of kramdown-rfc and xml2rfc automatic reformatting
+
+draft-02:
+
+
+{: spacing="compact"}
+
+- add executive summary
+- clarify that some actions are temporary in nature 
+("bridge logic") while the transition from 10-to 11-digits is
+in progress.
+- give examples of inaction and why it should be avoided
